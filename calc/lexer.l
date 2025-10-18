@@ -25,17 +25,23 @@ using TokenTag = EECS::Parser::token;
 yylval = lval;
 %}
 
-[0-9]+ { yylval->intVal = atoi(yytext); 
-	 return TokenTag::INTLIT; 
-	}
-[(] { return TokenTag::LPAR; }
-[)] { return TokenTag::RPAR; }
-[+] { return TokenTag::PLUS; }
-[-] { return TokenTag::MINUS; }
-[/] { return TokenTag::DIV; }
-[*] { return TokenTag::MULT; }
+[0-9]+     { yylval->intVal = atoi(yytext);  
+	     return TokenTag::INTLIT; 
+	   }
+calculate  { return TokenTag::CALCULATE; }
+orate      { return TokenTag::ORATE; }
+[A-Za-z]+  { yylval->strVal = strdup(yytext); 
+             return TokenTag::ID; 
+           }
+[(]        { return TokenTag::LPAR; }
+[)]        { return TokenTag::RPAR; }
+[+]        { return TokenTag::PLUS; }
+[-]        { return TokenTag::MINUS; }
+[/]        { return TokenTag::DIV; }
+[*]        { return TokenTag::MULT; }
 
-. {
+[ \t]      { }
+. { 
 	std::string msg = "Bad char";
 	msg += yytext;
 	msg += "\n";

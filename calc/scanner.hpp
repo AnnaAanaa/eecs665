@@ -22,7 +22,7 @@ public:
 	}
 	virtual ~Scanner() { }
 
-	virtual int yylex(EECS::Parser::semantic_type * lval);
+	virtual int yylex( EECS::Parser::semantic_type * lval);
 
 	void warn(int lineNum, int charNum, std::string msg){
 		cerr << "lex problem at" << lineNum << "," << charNum
@@ -30,7 +30,7 @@ public:
 	}
 	void error(int lineNum, int charNum, std::string msg){
 		cerr << "lex problem at" << lineNum << "," << charNum
-		<< "***ERROR*** " << msg << std::endl;
+					<< "***ERROR*** " << msg << std::endl;
 	}
 private:
 	EECS::Parser::semantic_type *yylval = nullptr;

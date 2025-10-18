@@ -1,0 +1,6 @@
+main : () void {
+  x:int;
+  x = 7;
+  sink x;
+  ofile << x;
+}

@@ -1,16 +1,16 @@
 all: calc test
 
 calc: parser.o lexer.o calc.o
-	${CXX} -g -o calc calc.o lexer.o parser.o
+	g++ -g -o calc calc.o lexer.o parser.o
 
 test: calc
 	./calc input.txt
 
 %.o: %.cpp
-	${CXX} -g -c $<
+	g++ -g -c $<
 
 lexer.o: lexer.yy.cc
-	${CXX} -g -c $< -o lexer.o
+	g++ -g -c $< -o lexer.o
 
 lexer.yy.cc: grammar.hh lexer.l
 	flex --outfile lexer.yy.cc lexer.l
@@ -23,4 +23,4 @@ parser.cc: parser.yy
 
 .PHONY: clean test
 clean: 
-	rm -rf *.o *.cc *.hh parser.output calc
+	rm -rf *.o *.cc *.hh calc parser.output

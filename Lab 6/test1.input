@@ -1,0 +1,6 @@
+x:int;
+
+main : () void {
+  x = 5;
+  ofile << x;
+}

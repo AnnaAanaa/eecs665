@@ -1,0 +1,97 @@
+/*********************************************************************
+ Grammar for programs in the Levi language
+ ********************************************************************/
+program         ::= globals
+
+globals         ::= globals decl
+                | /* epsilon */
+
+decl		::= varDecl SEMICOL
+       		 |  fnDecl
+
+varDecl         ::= name COLON type
+       		 |  name COLON type ASSIGN initializer
+
+type            ::= datatype
+                 |  IMMUTABLE datatype
+
+datatype        ::= primtype LBRACKET INTLITERAL RBRACKET
+                 |  primtype
+
+primType        ::= INT
+                 |  BOOL
+                 |  FILE
+                 |  VOID
+
+fnDecl          ::= name COLON LPAREN maybeformals RPAREN type LCURLY stmtList RCURLY
+
+maybeformals   ::= formalsList
+                 |  /* epsilon */
+
+formalsList     ::= formalDecl
+                 |  formalsList COMMA formalDecl
+
+formalDecl	::= name COLON type
+
+stmtList        ::= stmtList stmt SEMICOL
+                |   stmtList blockStmt
+                |   /* epsilon */
+
+blockStmt	::= WHILE LPAREN exp RPAREN LCURLY stmtList RCURLY
+		| IF LPAREN exp RPAREN LCURLY stmtList RCURLY
+		| IF LPAREN exp RPAREN LCURLY stmtList RCURLY ELSE LCURLY stmtList RCURLY
+
+stmt            ::= varDecl
+                | loc ASSIGN exp
+                | callExp
+                | loc POSTDEC
+                | loc POSTINC
+                | loc OUTPUT exp
+                | loc INPUT loc
+                | SINK name
+                | RETURN exp
+                | RETURN
+
+exp             ::= exp DASH exp
+                | exp CROSS exp
+                | exp STAR exp
+                | exp SLASH exp
+                | exp AND exp
+                | exp OR exp
+                | exp EQUALS exp
+                | exp NOTEQUALS exp
+                | exp GREATER exp
+                | exp GREATEREQ exp
+                | exp LESS exp
+                | exp LESSEQ exp
+                | NOT exp
+                | DASH term
+                | term
+
+callExp         ::=  loc LPAREN RPAREN   // fn call with no args
+                | loc LPAREN actualsList RPAREN  // with args
+
+actualsList     ::= exp
+                | actualsList COMMA exp
+                
+term            ::= loc
+                | literal
+                | THRASH
+                | LPAREN exp RPAREN
+                | callExp
+
+literal 	: INTLITERAL
+                | STRINGLITERAL
+                | TRUE
+                | FALSE
+
+litList		: literal
+		| literal COMMA litList
+
+initializer	: literal
+		| LBRACKET litList RBRACKET
+
+loc		::= name
+		| loc LBRACKET exp RBRACKET
+
+name           ::= ID
